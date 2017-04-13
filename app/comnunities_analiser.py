@@ -1,3 +1,3 @@
-from app import vk_api
+from app import vk_api, access_token
 
-print(vk_api.users.get(user_ids=(1,2)))
+print(vk_api.messages.getDialogs(offset=0, count = 10))
