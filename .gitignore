@@ -89,11 +89,8 @@ ENV/
 .ropeproject
 
 # Secure pass
-config/
 *.tkn
 
-# H
-config/access_token.tkn
 
 # macOS
 *.DS_Store
