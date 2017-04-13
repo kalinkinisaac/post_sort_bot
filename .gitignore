@@ -87,3 +87,10 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Secure pass
+.tkn
+
+# macOS
+.DS_Store
+.idea
