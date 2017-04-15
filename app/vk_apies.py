@@ -1,6 +1,7 @@
 import vk
 from .tokens_holder import Tokens
 
+
 class Vk():
     # API parameters
     api_version = '5.63'
@@ -19,7 +20,16 @@ class Vk():
 
     @staticmethod
     def init():
-        Tokens.Collect()
+        Tokens.collect()
+        # User vk API init
+        print("Auth...\n")
+        Vk.user_session = vk.AuthSession(
+            app_id=Tokens.app_id,
+            user_login=Tokens.user_token['user_login'],
+            user_password=Tokens.user_token['user_password']
+        )
+        Vk.user_api = vk.API(Vk.user_session, v=Vk.api_version, lang=Vk.api_lang, timeout=Vk.api_timeout)
+
         # Pub vk API init
         Vk.pub_session = vk.Session()
         Vk.pub_api = vk.API(Vk.pub_session, v=Vk.api_version, lang=Vk.api_lang, timeout=Vk.api_timeout)
@@ -27,5 +37,5 @@ class Vk():
         # Com vk API init
         Vk.com_session = vk.Session(access_token=Tokens.com_token)
         Vk.com_api = vk.API(Vk.com_session, v=Vk.api_version, lang=Vk.api_lang, timeout=Vk.api_timeout)
-
+        print("Done!\n")
 
