@@ -19,7 +19,7 @@ class Tokens:
         # Debug
         print("Collecting tokens...\n")
 
-        tokens_file = open('../config/access_tokens.tkn')
+        tokens_file = open('config/access_tokens.tkn')
         tokens_dict = dict(json.loads(tokens_file.read()))
 
         if 'user_token' in tokens_dict.keys():

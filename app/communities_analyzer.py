@@ -5,10 +5,9 @@ import time
 max_posts_count = 99
 
 
-def get_groups(key_word, com_type='group', sort_type=0, offset=0, count=5):
+def get_groups(key_word, sort_type=2, offset=0, count=5):
     groups = Vk.user_api.groups.search(
         q=key_word,
-        type=com_type,
         sort=sort_type,
         offset=offset,
         count=count
@@ -69,9 +68,11 @@ def render_group_desc(group):
     return 'Name of group : {}\nDirect link : vk.com/{}'.format(group['name'], group['screen_name'])
 
 
-def render_post_desc( post):
-    return 'Direct link : https://vk.com/{}?w=wall{}_{}\nLikes : {}\nReposts : {}\nComments : {}\nViews : {}'.format(
-        get_info(abs(int(post['owner_id'])))['screen_name'],
+def render_post_desc(post):
+    group = get_info(abs(int(post['owner_id'])))
+    return 'Group : {}\nDirect link : https://vk.com/{}?w=wall{}_{}\nLikes : {}\nReposts : {}\nComments : {}\nViews : {}'.format(
+        group['name'],
+        group['screen_name'],
         post['owner_id'],
         post['id'],
         post['likes']['count'],
@@ -85,23 +86,23 @@ def json_beauty(raw_json):
     return json.dumps(raw_json, sort_keys=True, indent=4, separators=(',', ': '), ensure_ascii=False)
 
 
-def analise():
+def analise(keyword, groups_count, posts_count):
     print("Requesting groups...\n")
 
     # KEYWORD HERE!
-    groups = get_groups('4ch', 5)
+    groups = get_groups(key_word=keyword, count=groups_count)
 
     posts = list()
     for group in groups:
         group_info = get_info(group['id'])
         if group_info['is_closed'] == 0:
-            posts += get_group_posts(group['id'], count=5, offset=1)
+            posts += get_group_posts(group['id'], count=posts_count, offset=1)
 
     posts = sorted(posts, key=lambda post: -post['likes']['count'])
 
-    for post in posts:
+    for post in posts[:5:]:
         print(render_post_desc(post) + '\n')
     # print(json.dumps(get_info(best['id']), sort_keys=True, indent=4, separators=(',', ': '), ensure_ascii=False))
 
 
-analise()
+
