@@ -24,8 +24,7 @@ def sort_group_posts(groups, post_sort_key, count=20, offset=0):
     return posts
 
 
-def get_group_posts(group_id, count=20, offset=0):
-
+def get_group_posts(group_id, count, offset=0):
     posts = list()
 
     for shift in range(0, count, max_posts_count):
@@ -55,7 +54,7 @@ def get_group_posts(group_id, count=20, offset=0):
                 done = False
                 fail_timer -= 1
 
-        return posts
+    return posts
 
 
 def get_info(group_id):
@@ -70,7 +69,8 @@ def render_group_desc(group):
 
 def render_post_desc(post):
     group = get_info(abs(int(post['owner_id'])))
-    return 'Group : {}\nDirect link : https://vk.com/{}?w=wall{}_{}\nLikes : {}\nReposts : {}\nComments : {}\nViews : {}'.format(
+    return 'Group : {}\nDirect link : https://vk.com/{}?w=wall{}_{}\n\
+    Likes : {}\nReposts : {}\nComments : {}\nViews : {}'.format(
         group['name'],
         group['screen_name'],
         post['owner_id'],
@@ -98,7 +98,7 @@ def analise(keyword, groups_count, posts_count):
         if group_info['is_closed'] == 0:
             posts += get_group_posts(group['id'], count=posts_count, offset=1)
 
-    posts = sorted(posts, key=lambda post: -post['likes']['count'])
+    posts = sorted(posts, key=lambda post: 0 if 'views' not in post else -post['likes']['count']/post['views']['count'])
 
     for post in posts[:5:]:
         print(render_post_desc(post) + '\n')
